@@ -53,7 +53,7 @@ ConsumeSpecial ← ⟨ConsumeKeyword|ConsumeNumber⟩⧻regex"^[0-9]".
 
 Consume ← ⟨
   ConsumeChar JsonTokenObjectOpen
-| ConsumeChar JsonTokenArrayClose
+| ConsumeChar JsonTokenObjectClose
 | ConsumeChar JsonTokenArrayOpen
 | ConsumeChar JsonTokenArrayClose
 | ConsumeChar JsonTokenComma
@@ -65,8 +65,12 @@ Consume ← ⟨
 StripLeadingWhitespace ← ▽\↥∵(⟨0|0|0|1⟩⊗:"\n\r ").
 Tokenize ← (
   ◌⍢(Consume StripLeadingWhitespace)(>0⧻) :[]
-  ⊂: ¤Token JsonTokenEof ""
+  ⊂: ¤Token JsonTokenEof "EOF"
 )
+
+AssertTokenType ← ⍥(
+  Error $"Unexpected token \"_\"" TokenValue ⊢
+) ¬∊ ⊙: TokenType ⊢. :
 
 ParseValue ← |1.2 ⟨
   JsonElement JsonStringValue ↘1↘¯1 TokenValue ⊃⊢(↘1)
@@ -77,13 +81,24 @@ ParseValue ← |1.2 ⟨
   ⍢(
     ParseValue
     :⊂:¤:⊃(⋅⋅∘)(⊙∘)
-    ⍥(
-      Error $"Unexpected token _" ⊢
-    ) ¬∊: [JsonTokenArrayClose JsonTokenComma] TokenType ⊢.
+    AssertTokenType [JsonTokenArrayClose JsonTokenComma]
     ⍥(↘1) ≍ JsonTokenComma TokenType ⊢.
   )(¬≍ JsonTokenArrayClose JsonElementType ⊢.)
   JsonElement JsonArrayValue :↘1
+| :{}↘1
+  ⍢(
+    AssertTokenType [JsonTokenString]
+    :↘1↘¯1 TokenValue ⊃⊢(↘1)
+    AssertTokenType [JsonTokenColon]
+    ParseValue ↘1
+    ⊃(⋅⋅∘|∘|⋅⋅⋅∘|⋅∘)
+    :insert □
+    AssertTokenType [JsonTokenComma JsonTokenObjectClose]
+    ⍥(↘1) ≍ JsonTokenComma TokenType ⊢.
+  )(¬≍ JsonTokenObjectClose JsonElementType ⊢.)
+  JsonElement JsonObjectValue :↘1
 | Error $"Unexpected token _" ⊃⊢(↘1)
-⟩ ⊗: {JsonTokenString JsonTokenNumber JsonTokenBoolean JsonTokenNull JsonTokenArrayOpen} TokenType ⊢.
+⟩ ⊗: {JsonTokenString JsonTokenNumber JsonTokenBoolean
+      JsonTokenNull JsonTokenArrayOpen JsonTokenObjectOpen} TokenType ⊢.
 
 Parse ← ⊙◌ ParseValue Tokenize
