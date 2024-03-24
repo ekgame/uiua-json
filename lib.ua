@@ -25,7 +25,7 @@ Error ← 0⍤:0
 # Returns:
 #   the unconsomed input
 #   the token list with new token appended to the end
-ConsumeToken ← :λ(⊂d [Token b ↙ac] ↘ac)
+ConsumeToken ← :λ(⊂d ¤Token b ↙ac ↘ac)
 ConsumeChar ← ConsumeToken 1
 
 ConsumeString ← (
@@ -65,16 +65,25 @@ Consume ← ⟨
 StripLeadingWhitespace ← ▽\↥∵(⟨0|0|0|1⟩⊗:"\n\r ").
 Tokenize ← (
   ◌⍢(Consume StripLeadingWhitespace)(>0⧻) :[]
-  ⊂:[Token JsonTokenEof ""]
+  ⊂: ¤Token JsonTokenEof ""
 )
 
-TrimQuotes ← ↘1↘¯1
-ParseValue ← ⟨
-  JsonElement JsonStringValue TrimQuotes TokenValue ⊃⊢(↘1)
+ParseValue ← |1.2 ⟨
+  JsonElement JsonStringValue ↘1↘¯1 TokenValue ⊃⊢(↘1)
 | JsonElement JsonNumberValue ⋕ TokenValue ⊃⊢(↘1)
 | JsonElement JsonBooleanValue ≍"true" TokenValue ⊃⊢(↘1)
 | JsonElement JsonNullValue 0 ↘1
+| :{}↘1
+  ⍢(
+    ParseValue
+    :⊂:¤:⊃(⋅⋅∘)(⊙∘)
+    ⍥(
+      Error $"Unexpected token _" ⊢
+    ) ¬∊: [JsonTokenArrayClose JsonTokenComma] TokenType ⊢.
+    ⍥(↘1) ≍ JsonTokenComma TokenType ⊢.
+  )(¬≍ JsonTokenArrayClose JsonElementType ⊢.)
+  JsonElement JsonArrayValue :↘1
 | Error $"Unexpected token _" ⊃⊢(↘1)
-⟩ ⊗: {JsonTokenString JsonTokenNumber JsonTokenBoolean JsonTokenNull} TokenType ⊢.
+⟩ ⊗: {JsonTokenString JsonTokenNumber JsonTokenBoolean JsonTokenNull JsonTokenArrayOpen} TokenType ⊢.
 
 Parse ← ⊙◌ ParseValue Tokenize
