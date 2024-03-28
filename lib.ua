@@ -15,6 +15,49 @@ Struct!(JsonElement|Type|Value)
 
 Error ← 0⍤:0
 
+# Hex to integer decoder by allantaylor314 
+HexToDec ← /(+×16)-@0-×39>@`.¯⌵
+
+UtfCodeToChar ← (
+  >127. HexToDec
+  ⍥(
+    ⬚0↯ ∞_6 ⋯
+    ⇌≡(⊂: [0 1])
+    ⟜⧻
+    ⍜⊢(⍜(↙)(↥1)¯:)
+    °⋯
+  )
+  ⊢°utf
+)
+
+UnescapeJsonChar ← (
+  °⊂
+  ≍ @\\.
+  ⍥(
+    °⊂:
+    ⊗:"\\/nrbtfu"
+    ⊃(∘|⋅⋅⋅∘|⋅⋅∘|⋅∘)
+    :⟨
+      ⊂:@\\
+    | ⊂:@/
+    | ⊂:@\n
+    | ⊂:@\r
+    | ⊂:@\b
+    | ⊂:@\t
+    | ⊂:@\u000C
+    | ?⊃(∘|⋅⋅∘|⋅∘)⊂:⊙:UtfCodeToChar⊃↙↘4:⊙:
+    ⟩
+  )
+  ⍥(:⊂⊙.:⊙:)¬≍ @\\.
+  :◌
+)
+
+UnescapeJsonString ← (
+  :""
+  ⍢(UnescapeJsonChar)(>0⧻)
+  ◌
+)
+
 # Consumes defined number of characters from the input
 # and appends it to a list of tokens.
 # Arguments:
@@ -73,7 +116,7 @@ AssertTokenType ← ⍥(
 ) ¬∊ ⊙: TokenType ⊢. :
 
 ParseValue ← |1.2 ⟨
-  JsonElement JsonStringValue ↘1↘¯1 TokenValue ⊃⊢(↘1)
+  JsonElement JsonStringValue UnescapeJsonString ↘1↘¯1 TokenValue ⊃⊢(↘1)
 | JsonElement JsonNumberValue ⋕ TokenValue ⊃⊢(↘1)
 | JsonElement JsonBooleanValue ≍"true" TokenValue ⊃⊢(↘1)
 | JsonElement JsonNullValue 0 ↘1
@@ -88,7 +131,7 @@ ParseValue ← |1.2 ⟨
 | :{}↘1
   ⍢(
     AssertTokenType [JsonTokenString]
-    :↘1↘¯1 TokenValue ⊃⊢(↘1)
+    :UnescapeJsonString ↘1↘¯1 TokenValue ⊃⊢(↘1)
     AssertTokenType [JsonTokenColon]
     ParseValue ↘1
     ⊃(⋅⋅∘|∘|⋅⋅⋅∘|⋅∘)
