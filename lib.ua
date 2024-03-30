@@ -158,3 +158,16 @@ ParseValue ← |1.2 ⟨
       JsonTokenNull JsonTokenArrayOpen JsonTokenObjectOpen} TokenType ⊢.
 
 Parse ← ⊙◌ ParseValue Tokenize
+
+BuildJsonObject! ← ^! JsonElement JsonObjectValue {}
+BuildJsonArray! ← ^! JsonElement JsonArrayValue {}
+
+JsonString ← JsonElement JsonStringValue
+JsonNumber ← JsonElement JsonNumberValue
+JsonBoolean ← JsonElement JsonBooleanValue
+JsonNull ← JsonElement JsonNullValue 0
+JsonObjectEntry ← (
+  ⊃(⋅⋅∘|⊙∘)
+  ⍜(JsonElementValue)(insert□⊃(⋅⊙∘|∘))
+)
+JsonArrayEntry ← ⍜(JsonElementValue)(⊂□:):
