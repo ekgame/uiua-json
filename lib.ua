@@ -18,17 +18,8 @@ Error ← 0⍤:0
 # Hex to integer decoder by allantaylor314 
 HexToDec ← /(+×16)-@0-×39>@`.¯⌵
 
-UtfCodeToChar ← (
-  >127. HexToDec
-  ⍥(
-    ⬚0↯ ∞_6 ⋯
-    ⇌≡(⊂: [0 1])
-    ⟜⧻
-    ⍜⊢(⍜(↙)(↥1)¯:)
-    °⋯
-  )
-  ⊢°utf
-)
+# UTF codepoint unescape by jonathanperret
+UtfCodeToChar ← + @\0 HexToDec
 
 UnescapeJsonChar ← (
   °⊂
@@ -45,7 +36,7 @@ UnescapeJsonChar ← (
     | ⊂:@\b
     | ⊂:@\t
     | ⊂:@\u000C
-    | ?⊃(∘|⋅⋅∘|⋅∘)⊂:⊙:UtfCodeToChar⊃↙↘4:⊙:
+    | ⊃(∘|⋅⋅∘|⋅∘)⊂:⊙:UtfCodeToChar⊃↙↘4:⊙:
     ⟩
   )
   ⍥(:⊂⊙.:⊙:)¬≍ @\\.
