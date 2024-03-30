@@ -49,6 +49,28 @@ UnescapeJsonString ← (
   ◌
 )
 
+HexDigits ← "0123456789abcdef"
+DecToHex ← ⊏:HexDigits⇌°⋯↯∞_4⋯
+ToUnicodeChar ← ⍢(⊂@0)(<4⧻) DecToHex -@\0
+AsciiChars ← +@ ⇡ -33 128
+
+EscapeJsonCharacter ← (
+  "\\\n\r\b\t\u000C".
+  ⊗:
+  ⟨
+    "\\\\"◌
+  | "\\n"◌
+  | "\\r"◌
+  | "\\b"◌
+  | "\\t"◌
+  | "\\f"
+  | ¬∊:AsciiChars.
+    ⍥(⊂"\\u"ToUnicodeChar)
+  ⟩
+)
+
+EscapeJsonString ← ∧(⊂:EscapeJsonCharacter):""
+
 # Consumes defined number of characters from the input
 # and appends it to a list of tokens.
 # Arguments:
