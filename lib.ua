@@ -133,7 +133,7 @@ Consume ↚ ⟨
 ⟩⊗⊙:⊢.:"{}[],:\""
 
 Tokenize ↚ (
-  ◌⍢(Consume StripLeadingWhitespace)(>0⧻) :[]
+  ◌⍢(Consume StripLeadingWhitespace)(>0⧻ StripLeadingWhitespace) :[]
   ⊂: ¤Token JsonTokenEof "EOF"
 )
 
