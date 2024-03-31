@@ -11,7 +11,7 @@ ParseJsonString $ "Hello world"
 ⍤ "Failed to parse string" ≍ JsonString "Hello world"
 
 ParseJsonString $ "thing\n\r\f\b\t"
-⍤ "Failed to parse complex string" ≍ ? JsonString "thing\n\r\u000C\b\t"
+⍤ "Failed to parse complex string" ≍ JsonString "thing\n\r\u000C\b\t"
 
 ParseJsonString $ "Hello \u00f8 world"
 ⍤ "Failed to parse unicode string" ≍ JsonString "Hello ø world"
