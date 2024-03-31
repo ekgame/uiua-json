@@ -155,7 +155,7 @@ ParseValue ← |1.2 ⟨
 
 Parse ← ⊙◌ ParseValue Tokenize
 
-BuildJsonObject! ← ^! JsonElement JsonObjectValue {}
+BuildJsonObject! ← ^! JsonElement JsonObjectValue EmptyMap
 BuildJsonArray! ← ^! JsonElement JsonArrayValue {}
 
 JsonString ← JsonElement JsonStringValue
@@ -179,5 +179,20 @@ Stringify ← |1 (
   | ⊂:@]⊂@[ /($"_,_")≡(□Stringify)
   | ≡(□$"_:_"⊃(EscapeJsonStringWithQuotes°□∘|Stringify⋅∘))°map
     ⊂:@}⊂@{ /($"_,_")
+  ⟩
+)
+
+Indent ← /$"_\n_"⍚(⊂▽:@ :)⊜□⊙:≠@\n,
+
+StringifyPretty ← |1 (
+  JsonElementType.
+  ⊗:[JsonArrayValue JsonObjectValue]
+  ⟨
+    /$"_,\n_"≡(□Stringify) JsonElementValue
+    ⊂:"\n]"⊂"[\n"Indent 2
+  | °mapJsonElementValue
+    ≡(□$"_: _" : StringifyPretty : EscapeJsonStringWithQuotes °□)
+    ⊂:"\n}"⊂"{\n"Indent 2 /$"_,\n_"
+  | Stringify
   ⟩
 )
