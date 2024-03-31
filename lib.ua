@@ -1,6 +1,6 @@
 # Experimental!
 
-###
+# --- Data structures ---
 
 PrivateEnum! ↚^ ⍚($"_ ↚ $_ _\n".) :⇡⧻.⍚(⊂∩°□:):⊃↙↘1
 PrivateEnum!(JsonToken|ObjectOpen|ObjectClose|ArrayOpen|ArrayClose|Comma|Colon|String|Number|Boolean|Null|Eof)
@@ -25,7 +25,7 @@ Struct! ↚^ (
 )
 Struct!(JsonElement|Type|Value)
 
-# Utilities
+# --- Utilities ---
 
 # Hex to integer decoder by allantaylor314 
 HexToDec ↚ /(+×16)-@0-×39>@`.¯⌵
@@ -90,7 +90,7 @@ EscapeJsonCharacter ↚ (
 EscapeJsonString ↚ ∧(⊂:EscapeJsonCharacter):""
 EscapeJsonStringWithQuotes ↚ ⊂:@"⊂@"EscapeJsonString
 
-# Tokenizing
+# --- Tokenizing ---
 
 # Consumes defined number of characters from the input
 # and appends it to a list of tokens.
@@ -137,7 +137,7 @@ Tokenize ↚ (
   ⊂: ¤Token JsonTokenEof "EOF"
 )
 
-# Parsing
+# --- Parsing ---
 
 AssertTokenType ↚ ⍥(
   Error $"Unexpected token \"_\"" TokenValue ⊢
@@ -174,7 +174,7 @@ ParseValue ↚ |1.2 ⟨
 
 ParseJsonString ← ⊙◌ ParseValue Tokenize
 
-# Json builders
+# --- Json builders ---
 
 BuildJsonObject! ← ^! JsonElement JsonObjectValue EmptyMap
 BuildJsonArray! ← ^! JsonElement JsonArrayValue {}
@@ -189,7 +189,7 @@ JsonObjectEntry ← (
 )
 JsonArrayEntry ← ⍜(JsonElementValue)(⊂□:):
 
-# Stringifying
+# --- Stringifying ---
 
 StringifyJson ← |1 (
   ⊃(JsonElementType|JsonElementValue)
