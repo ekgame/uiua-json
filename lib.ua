@@ -1,4 +1,7 @@
 # Experimental!
+
+### Data Structures
+
 PrivateEnum! ↚^ ⍚($"_ ↚ $_ _\n".) :⇡⧻.⍚(⊂∩°□:):⊃↙↘1
 PrivateEnum!(JsonToken|ObjectOpen|ObjectClose|ArrayOpen|ArrayClose|Comma|Colon|String|Number|Boolean|Null|Eof)
 
@@ -22,10 +25,21 @@ Struct! ↚^ (
 )
 Struct!(JsonElement|Type|Value)
 
-Error ↚ 0⍤:0
+### Utilities
 
 # Hex to integer decoder by allantaylor314 
 HexToDec ↚ /(+×16)-@0-×39>@`.¯⌵
+
+Error ↚ 0⍤:0
+Indent ↚ /$"_\n_"⍚(⊂▽:@ :)⊜□⊙:≠@\n,
+HexDigits ↚ "0123456789abcdef"
+DecToHex ↚ ⊏:HexDigits⇌°⋯↯∞_4⋯
+ToUnicodeChar ↚ ⍢(⊂@0)(<4⧻) DecToHex -@\0
+AsciiChars ↚ +@ ⇡ -33 128
+StripLeadingWhitespace ↚ ▽\↥∵(⟨0|0|0|1⟩⊗:"\n\r ").
+EmptyMap ↚ map {} {}
+
+### Escaping/unescaping
 
 # UTF codepoint unescape by jonathanperret
 UtfCodeToChar ↚ + @\0 HexToDec
@@ -58,11 +72,6 @@ UnescapeJsonString ↚ (
   ◌
 )
 
-HexDigits ↚ "0123456789abcdef"
-DecToHex ↚ ⊏:HexDigits⇌°⋯↯∞_4⋯
-ToUnicodeChar ↚ ⍢(⊂@0)(<4⧻) DecToHex -@\0
-AsciiChars ↚ +@ ⇡ -33 128
-
 EscapeJsonCharacter ↚ (
   "\\\n\r\b\t\u000C".
   ⊗:
@@ -80,6 +89,8 @@ EscapeJsonCharacter ↚ (
 
 EscapeJsonString ↚ ∧(⊂:EscapeJsonCharacter):""
 EscapeJsonStringWithQuotes ↚ ⊂:@"⊂@"EscapeJsonString
+
+### Tokenizing
 
 # Consumes defined number of characters from the input
 # and appends it to a list of tokens.
@@ -121,17 +132,16 @@ Consume ↚ ⟨
 | ConsumeSpecial
 ⟩⊗⊙:⊢.:"{}[],:\""
 
-StripLeadingWhitespace ↚ ▽\↥∵(⟨0|0|0|1⟩⊗:"\n\r ").
 Tokenize ↚ (
   ◌⍢(Consume StripLeadingWhitespace)(>0⧻) :[]
   ⊂: ¤Token JsonTokenEof "EOF"
 )
 
+### Parsing
+
 AssertTokenType ↚ ⍥(
   Error $"Unexpected token \"_\"" TokenValue ⊢
 ) ¬∊ ⊙: TokenType ⊢. :
-
-EmptyMap ↚ map {} {}
 
 ParseValue ↚ |1.2 ⟨
   JsonElement JsonStringValue UnescapeJsonString ↘1↘¯1 TokenValue ⊃⊢(↘1)
@@ -164,6 +174,8 @@ ParseValue ↚ |1.2 ⟨
 
 ParseJsonString ← ⊙◌ ParseValue Tokenize
 
+### Json builders
+
 BuildJsonObject! ← ^! JsonElement JsonObjectValue EmptyMap
 BuildJsonArray! ← ^! JsonElement JsonArrayValue {}
 
@@ -176,6 +188,8 @@ JsonObjectEntry ← (
   ⍜(JsonElementValue)(insert□⊃(⋅⊙∘|∘))
 )
 JsonArrayEntry ← ⍜(JsonElementValue)(⊂□:):
+
+### Stringifying
 
 StringifyJson ← |1 (
   ⊃(JsonElementType|JsonElementValue)
@@ -190,8 +204,6 @@ StringifyJson ← |1 (
     ⊂:@}⊂@{ /($"_,_")
   ⟩
 )
-
-Indent ↚ /$"_\n_"⍚(⊂▽:@ :)⊜□⊙:≠@\n,
 
 StringifyJsonPretty ← |1 (
   JsonElementType.
