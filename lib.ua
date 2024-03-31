@@ -122,12 +122,7 @@ AssertTokenType ← ⍥(
   Error $"Unexpected token \"_\"" TokenValue ⊢
 ) ¬∊ ⊙: TokenType ⊢. :
 
-# A hack to create an empty box array that can be successfully unmapped
-EmptyMap ← (
-  {}
-  insert ∩□ "a" "b"
-  remove "a"
-)
+EmptyMap ← map {} {}
 
 ParseValue ← |1.2 ⟨
   JsonElement JsonStringValue UnescapeJsonString ↘1↘¯1 TokenValue ⊃⊢(↘1)
