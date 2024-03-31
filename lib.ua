@@ -1,27 +1,36 @@
 # Experimental!
-Enum! ←^ ⍚($"_ ← $_ _\n".) :⇡⧻.⍚(⊂∩°□:):⊃↙↘1
-Enum!(JsonToken|ObjectOpen|ObjectClose|ArrayOpen|ArrayClose|Comma|Colon|String|Number|Boolean|Null|Eof)
+PrivateEnum! ↚^ ⍚($"_ ↚ $_ _\n".) :⇡⧻.⍚(⊂∩°□:):⊃↙↘1
+PrivateEnum!(JsonToken|ObjectOpen|ObjectClose|ArrayOpen|ArrayClose|Comma|Colon|String|Number|Boolean|Null|Eof)
+
+Enum! ↚^ ⍚($"_ ← $_ _\n".) :⇡⧻.⍚(⊂∩°□:):⊃↙↘1
 Enum!(Json|ObjectValue|ArrayValue|StringValue|NumberValue|BooleanValue|NullValue)
 
 # Struct macro by joaozin003 from Uiua Discord
-Struct! ←^ (
+PrivateStruct! ↚^ (
+  ◇⟜(⍚⊂¤)°⊂
+  □$"_ ↚ {_}\n":⊂⊃(↯:@⊙-1|↯:@∘±)⧻,
+  ⍚$"_ ↚ °□⊡_\n":⇡⧻.:
+  ⊂:
+)
+PrivateStruct!(Token|Type|Value)
+
+Struct! ↚^ (
   ◇⟜(⍚⊂¤)°⊂
   □$"_ ← {_}\n":⊂⊃(↯:@⊙-1|↯:@∘±)⧻,
   ⍚$"_ ← °□⊡_\n":⇡⧻.:
   ⊂:
 )
-Struct!(Token|Type|Value)
 Struct!(JsonElement|Type|Value)
 
-Error ← 0⍤:0
+Error ↚ 0⍤:0
 
 # Hex to integer decoder by allantaylor314 
-HexToDec ← /(+×16)-@0-×39>@`.¯⌵
+HexToDec ↚ /(+×16)-@0-×39>@`.¯⌵
 
 # UTF codepoint unescape by jonathanperret
-UtfCodeToChar ← + @\0 HexToDec
+UtfCodeToChar ↚ + @\0 HexToDec
 
-UnescapeJsonChar ← (
+UnescapeJsonChar ↚ (
   °⊂
   ≍ @\\.
   ⍥(
@@ -43,18 +52,18 @@ UnescapeJsonChar ← (
   :◌
 )
 
-UnescapeJsonString ← (
+UnescapeJsonString ↚ (
   :""
   ⍢(UnescapeJsonChar)(>0⧻)
   ◌
 )
 
-HexDigits ← "0123456789abcdef"
-DecToHex ← ⊏:HexDigits⇌°⋯↯∞_4⋯
-ToUnicodeChar ← ⍢(⊂@0)(<4⧻) DecToHex -@\0
-AsciiChars ← +@ ⇡ -33 128
+HexDigits ↚ "0123456789abcdef"
+DecToHex ↚ ⊏:HexDigits⇌°⋯↯∞_4⋯
+ToUnicodeChar ↚ ⍢(⊂@0)(<4⧻) DecToHex -@\0
+AsciiChars ↚ +@ ⇡ -33 128
 
-EscapeJsonCharacter ← (
+EscapeJsonCharacter ↚ (
   "\\\n\r\b\t\u000C".
   ⊗:
   ⟨
@@ -69,8 +78,8 @@ EscapeJsonCharacter ← (
   ⟩
 )
 
-EscapeJsonString ← ∧(⊂:EscapeJsonCharacter):""
-EscapeJsonStringWithQuotes ← ⊂:@"⊂@"EscapeJsonString
+EscapeJsonString ↚ ∧(⊂:EscapeJsonCharacter):""
+EscapeJsonStringWithQuotes ↚ ⊂:@"⊂@"EscapeJsonString
 
 # Consumes defined number of characters from the input
 # and appends it to a list of tokens.
@@ -82,26 +91,26 @@ EscapeJsonStringWithQuotes ← ⊂:@"⊂@"EscapeJsonString
 # Returns:
 #   the unconsomed input
 #   the token list with new token appended to the end
-ConsumeToken ← :⊂:⊙: ¤Token :⊙: ⊃↙↘ ⊃(∘|⋅⋅∘|⋅∘)
-ConsumeChar ← ConsumeToken 1
-ConsumeString ← (
+ConsumeToken ↚ :⊂:⊙: ¤Token :⊙: ⊃↙↘ ⊃(∘|⋅⋅∘|⋅∘)
+ConsumeChar ↚ ConsumeToken 1
+ConsumeString ↚ (
   .
   ⬚(□"") regex $ ^\x22(\\([\x22\\/bfnrt]|u[a-fA-F0-9]{4})|[^\x00-\x1F\x7F\x22]+)*\x22
   ⟨Error $"Invalid string at '_'"◌|ConsumeToken:JsonTokenString⧻°□⊢⊢⟩⧻.
 )
-ConsumeBoolean ← (
+ConsumeBoolean ↚ (
   regex "^(true|false)".
   ConsumeToken:JsonTokenBoolean⧻°□⊢⊢
 )
-ConsumeNull ← ⟨Error $"Unexpected character at '_'".|ConsumeToken 4 JsonTokenNull⟩⧻regex"^null".
-ConsumeKeyword ← ⟨ConsumeNull|ConsumeBoolean⟩⧻regex"^(true|false)".
-ConsumeNumber ← (
+ConsumeNull ↚ ⟨Error $"Unexpected character at '_'".|ConsumeToken 4 JsonTokenNull⟩⧻regex"^null".
+ConsumeKeyword ↚ ⟨ConsumeNull|ConsumeBoolean⟩⧻regex"^(true|false)".
+ConsumeNumber ↚ (
   .
   ⬚(□"") regex $ ^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?
   ConsumeToken:JsonTokenNumber⧻°□⊢⊢
 )
-ConsumeSpecial ← ⟨ConsumeKeyword|ConsumeNumber⟩⧻regex"^[0-9]".
-Consume ← ⟨
+ConsumeSpecial ↚ ⟨ConsumeKeyword|ConsumeNumber⟩⧻regex"^[0-9]".
+Consume ↚ ⟨
   ConsumeChar JsonTokenObjectOpen
 | ConsumeChar JsonTokenObjectClose
 | ConsumeChar JsonTokenArrayOpen
@@ -112,19 +121,19 @@ Consume ← ⟨
 | ConsumeSpecial
 ⟩⊗⊙:⊢.:"{}[],:\""
 
-StripLeadingWhitespace ← ▽\↥∵(⟨0|0|0|1⟩⊗:"\n\r ").
-Tokenize ← (
+StripLeadingWhitespace ↚ ▽\↥∵(⟨0|0|0|1⟩⊗:"\n\r ").
+Tokenize ↚ (
   ◌⍢(Consume StripLeadingWhitespace)(>0⧻) :[]
   ⊂: ¤Token JsonTokenEof "EOF"
 )
 
-AssertTokenType ← ⍥(
+AssertTokenType ↚ ⍥(
   Error $"Unexpected token \"_\"" TokenValue ⊢
 ) ¬∊ ⊙: TokenType ⊢. :
 
-EmptyMap ← map {} {}
+EmptyMap ↚ map {} {}
 
-ParseValue ← |1.2 ⟨
+ParseValue ↚ |1.2 ⟨
   JsonElement JsonStringValue UnescapeJsonString ↘1↘¯1 TokenValue ⊃⊢(↘1)
 | JsonElement JsonNumberValue ⋕ TokenValue ⊃⊢(↘1)
 | JsonElement JsonBooleanValue ≍"true" TokenValue ⊃⊢(↘1)
@@ -153,7 +162,7 @@ ParseValue ← |1.2 ⟨
 ⟩ ⊗: {JsonTokenString JsonTokenNumber JsonTokenBoolean
       JsonTokenNull JsonTokenArrayOpen JsonTokenObjectOpen} TokenType ⊢.
 
-Parse ← ⊙◌ ParseValue Tokenize
+ParseJsonString ← ⊙◌ ParseValue Tokenize
 
 BuildJsonObject! ← ^! JsonElement JsonObjectValue EmptyMap
 BuildJsonArray! ← ^! JsonElement JsonArrayValue {}
@@ -168,7 +177,7 @@ JsonObjectEntry ← (
 )
 JsonArrayEntry ← ⍜(JsonElementValue)(⊂□:):
 
-Stringify ← |1 (
+StringifyJson ← |1 (
   ⊃(JsonElementType|JsonElementValue)
   ⊗:[JsonStringValue JsonNumberValue JsonBooleanValue JsonNullValue JsonArrayValue JsonObjectValue]
   ⟨
@@ -176,23 +185,23 @@ Stringify ← |1 (
   | °⋕
   | °□⊡≠0:{"false" "true"}
   | "null"◌
-  | ⊂:@]⊂@[ /($"_,_")≡(□Stringify)
-  | ≡(□$"_:_"⊃(EscapeJsonStringWithQuotes°□∘|Stringify⋅∘))°map
+  | ⊂:@]⊂@[ /($"_,_")≡(□StringifyJson)
+  | ≡(□$"_:_"⊃(EscapeJsonStringWithQuotes°□∘|StringifyJson⋅∘))°map
     ⊂:@}⊂@{ /($"_,_")
   ⟩
 )
 
-Indent ← /$"_\n_"⍚(⊂▽:@ :)⊜□⊙:≠@\n,
+Indent ↚ /$"_\n_"⍚(⊂▽:@ :)⊜□⊙:≠@\n,
 
-StringifyPretty ← |1 (
+StringifyJsonPretty ← |1 (
   JsonElementType.
   ⊗:[JsonArrayValue JsonObjectValue]
   ⟨
-    /$"_,\n_"≡(□StringifyPretty) JsonElementValue
+    /$"_,\n_"≡(□StringifyJsonPretty) JsonElementValue
     ⊂:"\n]"⊂"[\n"Indent 2
   | °mapJsonElementValue
-    ≡(□$"_: _" : StringifyPretty : EscapeJsonStringWithQuotes °□)
+    ≡(□$"_: _" : StringifyJsonPretty : EscapeJsonStringWithQuotes °□)
     ⊂:"\n}"⊂"{\n"Indent 2 /$"_,\n_"
-  | Stringify
+  | StringifyJson
   ⟩
 )
