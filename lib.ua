@@ -192,7 +192,7 @@ JsonArrayEntry ← ⍜(JsonElementValue)(⊂:□:):
 # --- Stringifying ---
 
 StringifyJson ← |1 (
-  ⊃(JsonElementType|JsonElementValue)
+  ⊃(JsonElementType|JsonElementValue)°□
   ⊗:[JsonStringValue JsonNumberValue JsonBooleanValue JsonNullValue JsonArrayValue JsonObjectValue]
   ⟨
     EscapeJsonStringWithQuotes
@@ -206,7 +206,7 @@ StringifyJson ← |1 (
 )
 
 StringifyJsonPretty ← |1 (
-  JsonElementType.
+  JsonElementType.°□
   ⊗:[JsonArrayValue JsonObjectValue]
   ⟨
     /$"_,\n_"≡(□StringifyJsonPretty) JsonElementValue
