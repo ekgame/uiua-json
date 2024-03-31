@@ -151,7 +151,7 @@ ParseValue ↚ |1.2 ⟨
 | :{}↘1
   ⍢(
     ParseValue
-    :⊂:¤:⊃(⋅⋅∘)(⊙∘)
+    :⊂:□:⊃(⋅⋅∘)(⊙∘)
     AssertTokenType [JsonTokenArrayClose JsonTokenComma]
     ⍥(↘1) ≍ JsonTokenComma TokenType ⊢.
   )(¬≍ JsonTokenArrayClose JsonElementType ⊢.)
@@ -187,7 +187,7 @@ JsonObjectEntry ← (
   ⊃(⋅⋅∘|⊙∘)
   ⍜(JsonElementValue)(insert□⊃(⋅⊙∘|∘))
 )
-JsonArrayEntry ← ⍜(JsonElementValue)(⊂□:):
+JsonArrayEntry ← ⍜(JsonElementValue)(⊂:□:):
 
 # --- Stringifying ---
 
