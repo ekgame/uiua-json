@@ -19,6 +19,9 @@ ParseJsonString $ "Hello \u00f8 world"
 ParseJsonString $ 42
 ⍤ "Failed to parse number" ≍ JsonNumber 42
 
+ParseJsonString $ 42.5
+⍤ "Failed to parse floating point number" ≍ JsonNumber 42.5
+
 ParseJsonString $ true
 ⍤ "Failed to parse boolean" ≍ JsonBoolean 1
 
