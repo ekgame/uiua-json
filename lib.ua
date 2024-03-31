@@ -188,7 +188,7 @@ StringifyPretty ← |1 (
   JsonElementType.
   ⊗:[JsonArrayValue JsonObjectValue]
   ⟨
-    /$"_,\n_"≡(□Stringify) JsonElementValue
+    /$"_,\n_"≡(□StringifyPretty) JsonElementValue
     ⊂:"\n]"⊂"[\n"Indent 2
   | °mapJsonElementValue
     ≡(□$"_: _" : StringifyPretty : EscapeJsonStringWithQuotes °□)
