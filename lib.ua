@@ -117,7 +117,7 @@ ConsumeNull ↚ ⟨Error $"Unexpected character at '_'".|ConsumeToken 4 JsonToke
 ConsumeKeyword ↚ ⟨ConsumeNull|ConsumeBoolean⟩⧻regex"^(true|false)".
 ConsumeNumber ↚ (
   .
-  ⬚(□"") regex $ ^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?
+  ⬚(□"") regex $ ^-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?
   ConsumeToken:JsonTokenNumber⧻°□⊢⊢
 )
 ConsumeSpecial ↚ ⟨ConsumeKeyword|ConsumeNumber⟩⧻regex"^[0-9]".
