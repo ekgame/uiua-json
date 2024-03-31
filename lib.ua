@@ -70,6 +70,7 @@ EscapeJsonCharacter ← (
 )
 
 EscapeJsonString ← ∧(⊂:EscapeJsonCharacter):""
+EscapeJsonStringWithQuotes ← ⊂:@"⊂@"EscapeJsonString
 
 # Consumes defined number of characters from the input
 # and appends it to a list of tokens.
@@ -83,30 +84,23 @@ EscapeJsonString ← ∧(⊂:EscapeJsonCharacter):""
 #   the token list with new token appended to the end
 ConsumeToken ← :λ(⊂d ¤Token b ↙ac ↘ac)
 ConsumeChar ← ConsumeToken 1
-
 ConsumeString ← (
   .
   ⬚(□"") regex $ ^\x22(\\([\x22\\/bfnrt]|u[a-fA-F0-9]{4})|[^\x00-\x1F\x7F\x22]+)*\x22
   ⟨Error $"Invalid string at '_'"◌|ConsumeToken:JsonTokenString⧻°□⊢⊢⟩⧻.
 )
-
 ConsumeBoolean ← (
   regex "^(true|false)".
   ConsumeToken:JsonTokenBoolean⧻°□⊢⊢
 )
-
 ConsumeNull ← ⟨Error $"Unexpected character at '_'".|ConsumeToken 4 JsonTokenNull⟩⧻regex"^null".
-
 ConsumeKeyword ← ⟨ConsumeNull|ConsumeBoolean⟩⧻regex"^(true|false)".
-
 ConsumeNumber ← (
   .
   ⬚(□"") regex $ ^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?
   ConsumeToken:JsonTokenNumber⧻°□⊢⊢
 )
-
 ConsumeSpecial ← ⟨ConsumeKeyword|ConsumeNumber⟩⧻regex"^[0-9]".
-
 Consume ← ⟨
   ConsumeChar JsonTokenObjectOpen
 | ConsumeChar JsonTokenObjectClose
@@ -171,3 +165,17 @@ JsonObjectEntry ← (
   ⍜(JsonElementValue)(insert□⊃(⋅⊙∘|∘))
 )
 JsonArrayEntry ← ⍜(JsonElementValue)(⊂□:):
+
+Stringify ← |1 (
+  ⊃(JsonElementType|JsonElementValue)
+  ⊗:[JsonStringValue JsonNumberValue JsonBooleanValue JsonNullValue JsonArrayValue JsonObjectValue]
+  ⟨
+    EscapeJsonStringWithQuotes
+  | °⋕
+  | °□⊡≠0:{"false" "true"}
+  | "null"◌
+  | ⊂:@]⊂@[ /($"_,_":)⍚Stringify
+  | ≡(□$"_:_"⊃(EscapeJsonStringWithQuotes°□∘|Stringify⋅∘))°map
+    ⊂:@}⊂@{ /($"_,_")
+  ⟩
+)
