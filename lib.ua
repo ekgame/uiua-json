@@ -82,7 +82,7 @@ EscapeJsonStringWithQuotes ← ⊂:@"⊂@"EscapeJsonString
 # Returns:
 #   the unconsomed input
 #   the token list with new token appended to the end
-ConsumeToken ← :λ(⊂d ¤Token b ↙ac ↘ac)
+ConsumeToken ← :⊂:⊙: ¤Token :⊙: ⊃↙↘ ⊃(∘|⋅⋅∘|⋅∘)
 ConsumeChar ← ConsumeToken 1
 ConsumeString ← (
   .
@@ -122,6 +122,13 @@ AssertTokenType ← ⍥(
   Error $"Unexpected token \"_\"" TokenValue ⊢
 ) ¬∊ ⊙: TokenType ⊢. :
 
+# A hack to create an empty box array that can be successfully unmapped
+EmptyMap ← (
+  {}
+  insert ∩□ "a" "b"
+  remove "a"
+)
+
 ParseValue ← |1.2 ⟨
   JsonElement JsonStringValue UnescapeJsonString ↘1↘¯1 TokenValue ⊃⊢(↘1)
 | JsonElement JsonNumberValue ⋕ TokenValue ⊃⊢(↘1)
@@ -135,7 +142,7 @@ ParseValue ← |1.2 ⟨
     ⍥(↘1) ≍ JsonTokenComma TokenType ⊢.
   )(¬≍ JsonTokenArrayClose JsonElementType ⊢.)
   JsonElement JsonArrayValue :↘1
-| :{}↘1
+| :EmptyMap↘1
   ⍢(
     AssertTokenType [JsonTokenString]
     :UnescapeJsonString ↘1↘¯1 TokenValue ⊃⊢(↘1)
@@ -174,7 +181,7 @@ Stringify ← |1 (
   | °⋕
   | °□⊡≠0:{"false" "true"}
   | "null"◌
-  | ⊂:@]⊂@[ /($"_,_":)⍚Stringify
+  | ⊂:@]⊂@[ /($"_,_")≡(□Stringify)
   | ≡(□$"_:_"⊃(EscapeJsonStringWithQuotes°□∘|Stringify⋅∘))°map
     ⊂:@}⊂@{ /($"_,_")
   ⟩
