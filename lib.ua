@@ -9,21 +9,17 @@ Enum! ↚^ ⍚($"_ ← $_ _\n".) :⇡⧻.⍚(⊂∩°□:):⊃↙↘1
 Enum!(Json|ObjectValue|ArrayValue|StringValue|NumberValue|BooleanValue|NullValue)
 
 # Struct macro by joaozin003 from Uiua Discord
-PrivateStruct! ↚^ (
-  ◇⟜(⍚⊂¤)°⊂
-  □$"_ ↚ {_}\n":⊂⊃(↯:@⊙-1|↯:@∘±)⧻,
-  ⍚$"_ ↚ °□⊡_\n":⇡⧻.:
-  ⊂:
+PrivateStruct! ↚^ ⍜°⊂⊃(
+  □$"_ ↚ {_}\n":↯⊙@⊙⧻:
+| ⍚$"_ ↚ °□⊡_\n":⇡⧻.⍚◇⊂¤
 )
 PrivateStruct!(Token|Type|Value)
 
-Struct! ↚^ (
-  ◇⟜(⍚⊂¤)°⊂
-  □$"_ ← {_}\n":⊂⊃(↯:@⊙-1|↯:@∘±)⧻,
-  ⍚$"_ ← °□⊡_\n":⇡⧻.:
-  ⊂:
+Struct! ↚^ ⍜°⊂⊃(
+  □$"_ ← {_}\n":↯⊙@⊙⧻:
+| ⍚$"_ ← °□⊡_\n":⇡⧻.⍚◇⊂¤
 )
-Struct!(JsonElement|Type|Value)
+Struct!(JSONElement|Type|Value)
 
 # --- Utilities ---
 
