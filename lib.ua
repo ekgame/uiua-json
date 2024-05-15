@@ -19,7 +19,7 @@ Struct! ↚^ ⍜°⊂⊃(
   □$"_ ← {_}\n":↯⊙@⊙⧻:
 | ⍚$"_ ← °□⊡_\n":⇡⧻.⍚◇⊂¤
 )
-Struct!(JSONElement|Type|Value)
+Struct!(JsonElement|Type|Value)
 
 # --- Utilities ---
 
