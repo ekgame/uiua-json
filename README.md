@@ -136,7 +136,7 @@ JsonElementType
 
 ## Acknowledgements
 
-- Thanks to joaozin003 from Uiua Discord for a struct macro.
+- Thanks to [JoaoFelipe3](https://github.com/JoaoFelipe3) for the struct macro.
 - Thanks to jonathanperret from Uiua Discord for helping to massively simplifying my overkill code to unescape UTF16 codepoints to characters.
 - Thanks to allantaylor314 from Uiua Discord for their hexidecomal decoding code.
 - General thanks to the [Uiua Discord server](https://discord.gg/3r9nrfYhCc) for holding my hand and Uiua tips.
