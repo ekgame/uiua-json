@@ -1,12 +1,14 @@
 # JSON encoding/decoding for Uiua
 
-A library to parse JSON strings into a structure you can interpret in Uiua. Also includes utility functions to build JSON structures and stringify them.
+A library to parse JSON strings into a structure you can interpret in Uiua. Also includes utility functions to build JSON structures, stringify and prettyfy them.
 
 ## About
 
-Uiua does not have native functions to parse, manipulate and stringify JSON, so I built this library to do just that. The implementation is fairly rigorously tested and ready for general use. If you want to build microservices in Uiua, this should prove to be indispensible.
+The implementation is fairly rigorously tested and ready for general use. If you want to build microservices in Uiua, this should prove to be indispensible.
 
 Because Uiua does not have primitives for `true`, `false` and `null`, all primitives are wrapped in a box array with a type and a literal value. For `true`, the literal value is `1`, for `false` and `null`, the literal value is `0`. See examples for how to check for JSON value type. 
+
+**Note: Since 0.12.0 Uiua includes a native [`json`](https://www.uiua.org/docs/json) function for encoding/decoding JSON. This library still provides some features that you might find useful (such as distinct definitions for `0`/`false`, `1`/`true`, pretty printing, parsing with trailing commas and builder pattern), but it might be overkill if you just need basic JSON support. Consider using the native function instead of this library.** 
 
 # Usage
 
