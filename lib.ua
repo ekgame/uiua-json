@@ -8,7 +8,7 @@ PrivateEnum!(JsonToken|ObjectOpen|ObjectClose|ArrayOpen|ArrayClose|Comma|Colon|S
 Enum! ↚^ ⍚($"_ ← $_ _\n".) :⇡⧻.⍚(⊂∩°□:):⊃↙↘1
 Enum!(Json|ObjectValue|ArrayValue|StringValue|NumberValue|BooleanValue|NullValue)
 
-# Struct macro by joaozin003 from Uiua Discord
+# Thanks to JoaoFelipe3 (https://github.com/JoaoFelipe3) for the struct macro.
 PrivateStruct! ↚^ ⍜°⊂⊃(
   □$"_ ↚ {_}\n":↯⊙@⊙⧻:
 | ⍚$"_ ↚ °□⊡_\n":⇡⧻.⍚◇⊂¤
