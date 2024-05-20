@@ -1,18 +1,18 @@
 # JSON encoding/decoding for Uiua
 
-A library to parse JSON strings into a structure you can interpret in Uiua. Also includes utility functions to build JSON structures, stringify and prettyfy them.
+A library to parse JSON strings into a structure you can interpret in Uiua. Also includes utility functions to build JSON structures, stringify and prettify them.
 
 ## About
 
 The implementation is fairly rigorously tested and ready for general use. If you want to build microservices in Uiua, this should prove to be indispensible.
 
-Because Uiua does not have primitives for `true`, `false` and `null`, all primitives are wrapped in a box array with a type and a literal value. For `true`, the literal value is `1`, for `false` and `null`, the literal value is `0`. See examples for how to check for JSON value type. 
+Because Uiua does not have primitives for `true`, `false` and `null`, all primitives are wrapped in a [`□ box`](https://www.uiua.org/docs/box) array with a type and a literal value. For `true`, the literal value is `1`, for `false` and `null`, the literal value is `0`. See examples for how to check for JSON value type. 
 
-**Note: Since 0.12.0 Uiua includes a native [`json`](https://www.uiua.org/docs/json) function for encoding/decoding JSON. This library still provides some features that you might find useful (such as distinct definitions for `0`/`false`, `1`/`true`, pretty printing, parsing with trailing commas and builder pattern), but it might be overkill if you just need basic JSON support. Consider using the native function instead of this library.** 
+**Note: Since version 0.11.0 (not released as of now), Uiua includes a native [`json`](https://www.uiua.org/docs/json) function for encoding/decoding JSON. This library still provides some features that you might find useful (such as distinct definitions for `0`/`false`, `1`/`true`, pretty printing, parsing with trailing commas and builder pattern), but it might be overkill if you just need basic JSON support. Consider using the native function instead of this library.** 
 
 # Usage
 
-Simplest case of JSON parsing and value retrieval.
+This library can handle very simple cases of JSON parsing and value retrieval.
 
 [Test the code online](https://www.uiua.org/pad?src=0_10_0__IyBFeHBlcmltZW50YWwhCgp-ICJnaXQ6IGdpdGh1Yi5jb20vZWtnYW1lL3VpdWEtanNvbiIgfiBKc29uRWxlbWVudFZhbHVlIFBhcnNlSnNvblN0cmluZwoKJCB7CiQgICAiZm9vIjogImJhciIKJCB9CgojIFBhcnNlIHRoZSBKU09OClBhcnNlSnNvblN0cmluZwoKIyBUaGUgb2JqZWN0IHZhbHVlcyBhcmUgd3JhcHBlZCBpbiBhIHR5cGVkIGVsZW1lbnQsIHVzZSBKc29uRWxlbWVudFZhbHVlIHRvIHVud3JhcApKc29uRWxlbWVudFZhbHVlCgojIEdldCB0aGUgdmFsdWUgb2YgImZvbyIsIHdoaWNoIGlzIHdyYXBwZWQgaW4gYSB0eXBlZCBlbGVtZW50IGFuZCB1bndyYXAgaXQKSnNvbkVsZW1lbnRWYWx1ZSBnZXQgImZvbyIK)
 
@@ -87,7 +87,7 @@ $ {"unformatted": "json string", "value": null, "number": 42}
 &p StringifyJsonPretty ParseJsonString
 ```
 
-You can also use "under" glyph to unwrap values, edit them and wrap them back - effectively editing the JSON.
+You can also use [`⍜ under`](https://www.uiua.org/docs/under) glyph to unwrap values, edit them and wrap them back - effectively editing the JSON.
 
 [Test the code online](https://www.uiua.org/pad?src=0_10_0__IyBFeHBlcmltZW50YWwhCgp-ICJnaXQ6IGdpdGh1Yi5jb20vZWtnYW1lL3VpdWEtanNvbiIKICB-IEpzb25FbGVtZW50VmFsdWUKICB-IFBhcnNlSnNvblN0cmluZyBTdHJpbmdpZnlKc29uCgokIHsibGlzdCI6IFsyLCAzLCA0LCA1XX0KCiMgUGFyc2UgdGhlIHN0cmluZyBhbmQgZm9ybWF0IGl0ClBhcnNlSnNvblN0cmluZwrijZwoCiAgIyBVc2UgInVuZGVyIiB0byB1bndyYXAgdGhlIHZhbHVlcyBpbiAibGlzdCIga2V5CiAgSnNvbkVsZW1lbnRWYWx1ZSBnZXQgImxpc3QiIEpzb25FbGVtZW50VmFsdWUKfCAjIEZvciBlYWNoIHZhbHVlIGluIHRoZSBsaXN0IC0gdW53cmFwIGl0LCBzcXVhcmUgaXQKICDijZrijZwoSnNvbkVsZW1lbnRWYWx1ZXzDly4pCikKJnAgU3RyaW5naWZ5SnNvbgo=)
 
@@ -112,7 +112,7 @@ ParseJsonString
 &p StringifyJson
 ```
 
-If you have a wrapped value, you can check for it's type.
+If you have a wrapped value, you can check for its type.
 
 [Test the code online](https://www.uiua.org/pad?src=0_10_0__IyBFeHBlcmltZW50YWwhCgp-ICJnaXQ6IGdpdGh1Yi5jb20vZWtnYW1lL3VpdWEtanNvbiIKICB-IEpzb25Cb29sZWFuVmFsdWUKICB-IEpzb25FbGVtZW50VHlwZSBKc29uRWxlbWVudFZhbHVlCiAgfiBQYXJzZUpzb25TdHJpbmcgU3RyaW5naWZ5SnNvbgoKIyBQYXJzZSBhIEpzb24gdmFsdWUKUGFyc2VKc29uU3RyaW5nICQgdHJ1ZQojIEV4dHJhY3QgdGhlIGVsZW1lbnQgdHlwZQpKc29uRWxlbWVudFR5cGUKIyBDaGFjayBpZiB0aGUgdmFsdWUgaXMgYSBib29sZWFuCiMgQWx0ZXJuYXRpdmVseSBjaGFjayBhZ2FpbnN0ICJKc29uU3RyaW5nVmFsdWUiLCAiSnNvbk51bWJlclZhbHVlIiwKIyAiSnNvbk51bGxWYWx1ZSIsICJKc29uQXJyYXlWYWx1ZSIgb3IgIkpzb25PYmplY3RWYWx1ZSIuCuKJjSBKc29uQm9vbGVhblZhbHVlCg==)
 
@@ -139,6 +139,6 @@ JsonElementType
 ## Acknowledgements
 
 - Thanks to [JoaoFelipe3](https://github.com/JoaoFelipe3) for the struct macro.
-- Thanks to jonathanperret from Uiua Discord for helping to massively simplifying my overkill code to unescape UTF16 codepoints to characters.
-- Thanks to allantaylor314 from Uiua Discord for their hexidecomal decoding code.
+- Thanks to jonathanperret from the Uiua Discord for helping to massively simplifying my overkill code to unescape UTF16 codepoints to characters.
+- Thanks to allantaylor314 from the Uiua Discord for their hexadecimal decoding code.
 - General thanks to the [Uiua Discord server](https://discord.gg/3r9nrfYhCc) for holding my hand and Uiua tips.

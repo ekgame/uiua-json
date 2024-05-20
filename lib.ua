@@ -2,10 +2,10 @@
 
 # --- Data structures ---
 
-PrivateEnum! ↚^ ⍚($"_ ↚ $_ _\n".) :⇡⧻.⍚(⊂∩°□)°⊂
+PrivateEnum! ↚^ ⍚($"_ ↚ $_ _\n".) :⇡⧻.⍚◇⊂°⊂
 PrivateEnum!(JsonToken|ObjectOpen|ObjectClose|ArrayOpen|ArrayClose|Comma|Colon|String|Number|Boolean|Null|Eof)
 
-Enum! ↚^ ⍚($"_ ← $_ _\n".) :⇡⧻.⍚(⊂∩°□)°⊂
+Enum! ↚^ ⍚($"_ ← $_ _\n".) :⇡⧻.⍚◇⊂°⊂
 Enum!(Json|ObjectValue|ArrayValue|StringValue|NumberValue|BooleanValue|NullValue)
 
 # Thanks to JoaoFelipe3 (https://github.com/JoaoFelipe3) for the struct macro.
